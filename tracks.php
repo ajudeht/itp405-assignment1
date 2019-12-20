@@ -23,7 +23,7 @@ function getTrackList() {
   $pdo = (new SQLiteConnection())->connect();
   $genre = htmlspecialchars($_GET["genre"]);
 
-    $stmt = $pdo->query('SELECT tracks.Name as Name, tracks.UnitPrice as UnitPrice, tracks.Composer as Artist, albums.Title as Album, genres.Name as Genre FROM tracks, albums, genres WHERE ' . (is_null($genre) ? ('genres.Name = "' . $genre . '" AND') : '') . ' tracks.AlbumID = albums.AlbumId AND tracks.GenreId = genres.GenreId ');
+    $stmt = $pdo->query('SELECT tracks.Name as Name, tracks.UnitPrice as UnitPrice, tracks.Composer as Artist, albums.Title as Album, genres.Name as Genre FROM tracks, albums, genres WHERE ' . (is_null($genre) ? '' : ('genres.Name = "' . $genre . '" AND')) . ' tracks.AlbumID = albums.AlbumId AND tracks.GenreId = genres.GenreId ');
 
 
     $tracks = [];
