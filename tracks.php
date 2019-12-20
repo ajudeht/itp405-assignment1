@@ -21,9 +21,10 @@ function getGenreList() {
 
 function getTrackList() {
   $pdo = (new SQLiteConnection())->connect();
-  $genre = htmlspecialchars($_GET["genre"]);
 
-    $stmt = $pdo->query('SELECT tracks.Name as Name, tracks.UnitPrice as UnitPrice, tracks.Composer as Artist, albums.Title as Album, genres.Name as Genre FROM tracks, albums, genres WHERE tracks.AlbumID = albums.AlbumId AND tracks.GenreId = genres.GenreId ' . (is_null($genre) ? '' : ('AND genres.Name = "' . $genre . '"')));
+  $genre = (!empty($_GET["genre"])) ? htmlspecialchars($_GET["genre"]) : null;
+
+    $stmt = $pdo->query('SELECT tracks.Name as Name, tracks.UnitPrice as UnitPrice, tracks.Composer as Artist, albums.Title as Album, genres.Name as Genre FROM tracks, albums, genres WHERE ' . ( (!empty($_GET["genre"])) ? ('genres.Name = "' . $genre . '" AND') : '' ) . ' tracks.AlbumID = albums.AlbumId AND tracks.GenreId = genres.GenreId ');
 
 
     $tracks = [];
@@ -57,7 +58,7 @@ function getTrackList() {
           </div>
         </div>
         <div class="level-right">
-          <?php if ($_GET["genre"]) echo '<span class="tag is-medium is-dark">' . htmlspecialchars($_GET["genre"]) . '</span>' ?>
+          <?php if (!empty($_GET["genre"])) echo '<span class="tag is-medium is-dark">' . htmlspecialchars($_GET["genre"]) . '</span>' ?>
         </div>
       </nav>
 
